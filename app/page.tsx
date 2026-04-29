@@ -110,7 +110,7 @@ export default function MoodLokura() {
     try {
       const moodsRef = collection(db, 'users', userId, 'moods');
       const snapshot = await getDocs(moodsRef);
-      
+
       const cloudData: Record<string, MoodEntry> = {};
       snapshot.forEach(doc => {
         const data = doc.data();
@@ -126,7 +126,7 @@ export default function MoodLokura() {
       // Merge local and cloud data (prefer cloud if same timestamp or newer)
       const mergedData = { ...localData };
       for (const [date, cloudEntry] of Object.entries(cloudData)) {
-         mergedData[date] = cloudEntry;
+        mergedData[date] = cloudEntry;
       }
 
       setMoods(mergedData);
@@ -261,8 +261,8 @@ export default function MoodLokura() {
 
   const renderStatusBadge = () => (
     <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider transition-colors
-      ${syncMode === 'cloud' 
-        ? 'bg-secondary/10 border-secondary/30 text-secondary' 
+      ${syncMode === 'cloud'
+        ? 'bg-secondary/10 border-secondary/30 text-secondary'
         : 'bg-surface-variant border-white/10 text-outline'}`}
     >
       {syncMode === 'cloud' ? <Cloud className="w-4 h-4" /> : <MonitorSmartphone className="w-4 h-4" />}
@@ -289,11 +289,11 @@ export default function MoodLokura() {
             {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(d => (
               <div key={d} className="text-[10px] font-black text-outline uppercase tracking-tighter">{d}</div>
             ))}
-            
+
             {blanks.map(b => (
               <div key={`blank-${b}`} className="h-12 w-12 mx-auto" />
             ))}
-            
+
             {days.map(d => {
               const dateStr = formatDate(new Date(currentMonthDate.getFullYear(), currentMonthDate.getMonth(), d));
               const entry = moods[dateStr];
@@ -329,8 +329,8 @@ export default function MoodLokura() {
           <div>
             <h4 className="font-bold text-on-surface font-headline">Insight del mes</h4>
             <p className="text-sm text-on-surface-variant">
-              {Object.keys(moods).length > 0 
-                ? "¡Genial! Has estado registrando tus emociones. Sigue explorando tus tendencias."
+              {Object.keys(moods).length > 0
+                ? "¡Excelente! Has estado registrando tus emociones. Sigue explorando tus tendencias."
                 : "Comienza a registrar tus estados de ánimo para ver insights personalizados aquí."}
             </p>
           </div>
@@ -342,7 +342,7 @@ export default function MoodLokura() {
           <h2 className="text-2xl font-headline font-bold text-white mb-8">
             {isToday ? 'Registro de hoy' : `Registro del ${formatVisualDate(selectedDate)}`}
           </h2>
-          
+
           {firebaseError && (
             <div className="mb-6 p-4 rounded-xl bg-error-dim/10 border border-error-dim/20 text-error-dim text-sm flex items-center gap-3">
               <ShieldAlert className="w-5 h-5 shrink-0" />
@@ -379,11 +379,11 @@ export default function MoodLokura() {
             <div className="space-y-4">
               <label className="text-xs font-bold uppercase tracking-widest text-outline">¿Qué ha pasado hoy?</label>
               <div className="relative">
-                <textarea 
+                <textarea
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
-                  className="w-full bg-white/5 border-none focus:ring-1 focus:ring-primary rounded-2xl p-4 text-on-surface placeholder:text-outline/50 min-h-[120px] resize-none font-body text-sm outline-none transition-all" 
-                  maxLength={150} 
+                  className="w-full bg-white/5 border-none focus:ring-1 focus:ring-primary rounded-2xl p-4 text-on-surface placeholder:text-outline/50 min-h-[120px] resize-none font-body text-sm outline-none transition-all"
+                  maxLength={150}
                   placeholder="Escribe aquí tus pensamientos..."
                 />
                 <span className="absolute bottom-3 right-4 text-[10px] text-outline">{note.length} / 150</span>
@@ -394,13 +394,13 @@ export default function MoodLokura() {
               <label className="text-xs font-bold uppercase tracking-widest text-outline">Nivel de energía</label>
               <div className="grid grid-cols-3 gap-3">
                 {(['baja', 'media', 'alta'] as Energy[]).map((e) => (
-                  <button 
+                  <button
                     key={e}
-                    type="button" 
+                    type="button"
                     onClick={() => setEnergy(e)}
                     className={`py-3 px-2 rounded-xl text-xs font-bold transition-all capitalize
-                      ${energy === e 
-                        ? 'bg-primary text-on-primary-fixed shadow-lg shadow-primary/20' 
+                      ${energy === e
+                        ? 'bg-primary text-on-primary-fixed shadow-lg shadow-primary/20'
                         : 'border border-white/10 hover:bg-white/5 text-on-surface'
                       }
                     `}
@@ -413,30 +413,30 @@ export default function MoodLokura() {
 
             <div className="space-y-4">
               <label className="text-xs font-bold uppercase tracking-widest text-outline">Una palabra para hoy</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={word}
                 onChange={(e) => setWord(e.target.value)}
-                className="w-full bg-white/5 border-none focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-on-surface placeholder:text-outline/50 font-body text-sm outline-none transition-all" 
-                maxLength={30} 
-                placeholder="Define tu día en una palabra..." 
+                className="w-full bg-white/5 border-none focus:ring-1 focus:ring-primary rounded-xl px-4 py-3 text-on-surface placeholder:text-outline/50 font-body text-sm outline-none transition-all"
+                maxLength={30}
+                placeholder="Define tu día en una palabra..."
               />
             </div>
 
-            <motion.button 
+            <motion.button
               whileTap={{ scale: selectedMood ? 0.98 : 1 }}
-              type="submit" 
+              type="submit"
               disabled={!selectedMood || isSaving}
               className={`w-full font-headline font-extrabold py-5 rounded-2xl transition-all relative overflow-hidden group flex items-center justify-center gap-2
-                ${selectedMood 
-                  ? 'bg-gradient-to-r from-primary-dim to-primary text-on-primary-fixed shadow-xl shadow-primary/30 cursor-pointer' 
+                ${selectedMood
+                  ? 'bg-gradient-to-r from-primary-dim to-primary text-on-primary-fixed shadow-xl shadow-primary/30 cursor-pointer'
                   : 'bg-surface-variant text-outline cursor-not-allowed'
                 }
               `}
             >
               <AnimatePresence mode="wait">
                 {isSaving ? (
-                  <motion.span 
+                  <motion.span
                     key="saving"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -446,7 +446,7 @@ export default function MoodLokura() {
                     GUARDADO ✨
                   </motion.span>
                 ) : (
-                  <motion.span 
+                  <motion.span
                     key="save"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -519,7 +519,7 @@ export default function MoodLokura() {
                           <span className="text-on-surface-variant font-bold">{percentage}%</span>
                         </div>
                         <div className="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
-                          <motion.div 
+                          <motion.div
                             initial={{ width: 0 }}
                             animate={{ width: `${percentage}%` }}
                             transition={{ duration: 1, ease: 'easeOut' }}
@@ -579,20 +579,20 @@ export default function MoodLokura() {
               const entry = moods[dateStr];
               const moodData = MOODS[entry.mood];
               const d = parseDateString(dateStr);
-              
+
               return (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
-                  key={dateStr} 
+                  key={dateStr}
                   className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active"
                 >
                   <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-background bg-surface-container shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 overflow-hidden shadow-xl">
                     <span className="text-xl">{moodData.emoji}</span>
                   </div>
-                  
+
                   <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] glass-panel p-6 rounded-[2rem] border border-white/5 hover:border-white/10 transition-colors">
                     <div className="flex items-center justify-between mb-3">
                       <span className={`text-xs font-bold uppercase tracking-widest ${moodData.color}`}>{formatVisualDate(dateStr)}</span>
@@ -640,7 +640,7 @@ export default function MoodLokura() {
               ) : (
                 <div className="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center border border-white/10 text-xl">👤</div>
               )}
-              
+
               <div>
                 <p className="text-on-surface font-bold flex items-center gap-2">
                   {user ? user.displayName || 'Usuario con Estado de Ánimo' : 'Modo Local'}
@@ -650,17 +650,17 @@ export default function MoodLokura() {
                 </p>
               </div>
             </div>
-            
+
             {user ? (
-               <button onClick={handleLogout} className="flex items-center gap-2 bg-surface-variant hover:bg-white/10 text-on-surface font-medium py-2 px-4 rounded-xl transition-all border border-white/10 whitespace-nowrap text-sm">
-                 <LogOut className="w-4 h-4" />
-                 Cerrar Sesión
-               </button>
+              <button onClick={handleLogout} className="flex items-center gap-2 bg-surface-variant hover:bg-white/10 text-on-surface font-medium py-2 px-4 rounded-xl transition-all border border-white/10 whitespace-nowrap text-sm">
+                <LogOut className="w-4 h-4" />
+                Cerrar Sesión
+              </button>
             ) : (
-               <button onClick={handleLogin} disabled={isLoadingAuth} className="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-on-surface font-medium py-2 px-4 rounded-xl transition-all border border-white/10 whitespace-nowrap text-sm disabled:opacity-50">
-                 {isLoadingAuth ? <Loader2 className="w-4 h-4 animate-spin" /> : <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwCHa44betZ_cEar5e9ze8TtcFVCdVRKwS8BPaBpKHMh8m64xFQNUBpV6JVfDPA4L2h7vMKNu1NXuvb9h900s6r5tNhw8Wx785tpeKIXr_L7gubyVkW-clR5gcwObJ6QsPUsxCGWEgF3yRvZOfe-f62Bj_3DPA7tOSelb4IHljzizWwiHAmtsW-_iDI7Z6SR2xKHbhtzbw6xYP5_ITmGl4k2roVYmQpc7gn-6X1Pryygk2SLlEaR4vpuoFNM7rHaClF49-UJyevs77" alt="Google" className="w-4 h-4" />}
-                 Conectar Cuenta
-               </button>
+              <button onClick={handleLogin} disabled={isLoadingAuth} className="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-on-surface font-medium py-2 px-4 rounded-xl transition-all border border-white/10 whitespace-nowrap text-sm disabled:opacity-50">
+                {isLoadingAuth ? <Loader2 className="w-4 h-4 animate-spin" /> : <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwCHa44betZ_cEar5e9ze8TtcFVCdVRKwS8BPaBpKHMh8m64xFQNUBpV6JVfDPA4L2h7vMKNu1NXuvb9h900s6r5tNhw8Wx785tpeKIXr_L7gubyVkW-clR5gcwObJ6QsPUsxCGWEgF3yRvZOfe-f62Bj_3DPA7tOSelb4IHljzizWwiHAmtsW-_iDI7Z6SR2xKHbhtzbw6xYP5_ITmGl4k2roVYmQpc7gn-6X1Pryygk2SLlEaR4vpuoFNM7rHaClF49-UJyevs77" alt="Google" className="w-4 h-4" />}
+                Conectar Cuenta
+              </button>
             )}
           </div>
         </div>
@@ -676,7 +676,7 @@ export default function MoodLokura() {
               <p className="text-error-dim font-bold">Borrar todos los datos locales</p>
               <p className="text-error-dim/70 text-sm">Esta acción eliminará el historial guardado en este navegador.</p>
             </div>
-            <button 
+            <button
               onClick={clearData}
               className="flex items-center gap-2 bg-error-dim hover:bg-error text-white font-bold py-2 px-6 rounded-xl transition-all shadow-lg shadow-error-dim/20 whitespace-nowrap"
             >
@@ -700,8 +700,8 @@ export default function MoodLokura() {
         </div>
         <nav className="hidden md:flex items-center gap-8">
           {(['diario', 'estadisticas', 'calendario', 'ajustes'] as View[]).map((view) => (
-            <button 
-              key={view} 
+            <button
+              key={view}
               onClick={() => setCurrentView(view)}
               className={`font-headline tracking-tight capitalize transition-colors ${currentView === view ? 'text-primary font-bold' : 'text-outline hover:text-primary-dim'}`}
             >
@@ -733,28 +733,28 @@ export default function MoodLokura() {
           <p className="text-on-surface-variant text-sm">¿Cómo te sientes hoy?</p>
         </div>
         <nav className="flex flex-col gap-2">
-          <button 
+          <button
             onClick={() => setCurrentView('diario')}
             className={`w-full flex items-center gap-4 rounded-xl px-4 py-3 transition-all ${currentView === 'diario' ? 'bg-primary/10 text-primary border-l-4 border-primary' : 'text-outline hover:text-on-surface hover:bg-white/5 border-l-4 border-transparent'}`}
           >
             <BookOpen className="w-5 h-5" />
             <span className="font-medium text-sm">Diario</span>
           </button>
-          <button 
+          <button
             onClick={() => setCurrentView('estadisticas')}
             className={`w-full flex items-center gap-4 rounded-xl px-4 py-3 transition-all ${currentView === 'estadisticas' ? 'bg-primary/10 text-primary border-l-4 border-primary' : 'text-outline hover:text-on-surface hover:bg-white/5 border-l-4 border-transparent'}`}
           >
             <BarChart className="w-5 h-5" />
             <span className="font-medium text-sm">Estadísticas</span>
           </button>
-          <button 
+          <button
             onClick={() => setCurrentView('calendario')}
             className={`w-full flex items-center gap-4 rounded-xl px-4 py-3 transition-all ${currentView === 'calendario' ? 'bg-primary/10 text-primary border-l-4 border-primary' : 'text-outline hover:text-on-surface hover:bg-white/5 border-l-4 border-transparent'}`}
           >
             <CalendarIcon className="w-5 h-5" />
             <span className="font-medium text-sm">Calendario</span>
           </button>
-          <button 
+          <button
             onClick={() => setCurrentView('ajustes')}
             className={`w-full flex items-center gap-4 rounded-xl px-4 py-3 transition-all ${currentView === 'ajustes' ? 'bg-primary/10 text-primary border-l-4 border-primary' : 'text-outline hover:text-on-surface hover:bg-white/5 border-l-4 border-transparent'}`}
           >
@@ -765,8 +765,8 @@ export default function MoodLokura() {
         <div className="mt-auto">
           {user ? (
             <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 bg-surface-variant hover:bg-white/10 text-on-surface font-medium py-3 px-4 rounded-xl transition-all border border-white/10 group">
-               <LogOut className="w-4 h-4 text-outline" />
-               <span className="text-xs">Cerrar Sesión</span>
+              <LogOut className="w-4 h-4 text-outline" />
+              <span className="text-xs">Cerrar Sesión</span>
             </button>
           ) : (
             <button onClick={handleLogin} disabled={isLoadingAuth} className="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-on-surface font-medium py-3 px-4 rounded-xl transition-all border border-white/10 group disabled:opacity-50">
